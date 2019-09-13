@@ -6,11 +6,11 @@ to guess the format. Recognized file formats include: JSON, YAML and TOML.
 
 ## Supported conversions
 
-|           | to JSON | to YAML | to TOML |
-|:---------:|:-------:|:-------:|:-------:|
-| from JSON |    y    |    y    |    y    |
-| from YAML |    y    |    y    |    y    |
-| from TOML |    y    |    y    |    y    |
+|           | to JSON  | to YAML  | to TOML  |
+|:---------:|:--------:|:--------:|:--------:|
+| from JSON |   :+1:   |   :+1:   |   :+1:   |
+| from YAML |   :+1:   |   :+1:   |   :+1:   |
+| from TOML |   :+1:   |   :+1:   |   :+1:   |
 
 ## Usage
 
