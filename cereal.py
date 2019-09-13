@@ -10,7 +10,7 @@ import yaml
 import toml
 from os.path import splitext
 
-__program__ = "marshall"
+__program__ = "cereal"
 __version__ = "1.0.0"
 
 loaders = {
