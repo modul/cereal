@@ -7,6 +7,7 @@
 import argparse
 import json
 import yaml
+import toml
 from os.path import splitext
 
 __program__ = "marshall"
@@ -15,13 +16,15 @@ __version__ = "1.0.0"
 loaders = {
   ".json": json.load,
   ".yaml": yaml.safe_load,
-  ".yml": yaml.safe_load
+  ".yml": yaml.safe_load,
+  ".toml": toml.load
 }
 
 writers = {
   ".json": json.dump,
   ".yaml": yaml.safe_dump,
-  ".yml": yaml.safe_dump
+  ".yml": yaml.safe_dump,
+  ".toml": toml.dump
 }
 
 def options():
