@@ -13,7 +13,7 @@ from os.path import splitext
 __program__ = "cereal"
 __version__ = "1.0.0"
 
-loaders = {
+readers = {
   ".json": json.load,
   ".yaml": yaml.safe_load,
   ".yml": yaml.safe_load,
@@ -28,7 +28,7 @@ writers = {
 }
 
 def options():
-  recognizedFormats = ", ".join(loaders.keys())
+  recognizedFormats = ", ".join(readers.keys())
 
   parser = argparse.ArgumentParser(description="Converts files between different serialization formats. Uses the file extensions of the input and output files to guess the format. Recognized extensions are: {}.".format(recognizedFormats),
                                    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -43,9 +43,9 @@ def main(ifile, ofile):
   _, iext = splitext(ifile.name)
   _, oext = splitext(ofile.name)
 
-  loader = loaders[iext]
+  reader = readers[iext]
   writer = writers[oext]
-  writer(loader(ifile), ofile)
+  writer(reader(ifile), ofile)
 
 if __name__ == "__main__":
   opts = options()
