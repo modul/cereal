@@ -1,2 +1,2 @@
-# marshall
-Convert between common serialization formats
+# Cereal
+Convert between common serialization formats.
