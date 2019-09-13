@@ -21,7 +21,7 @@ loaders = {
 }
 
 writers = {
-  ".json": json.dump,
+  ".json": lambda d, f: json.dump(d, f, indent=2),
   ".yaml": yaml.safe_dump,
   ".yml": yaml.safe_dump,
   ".toml": toml.dump
