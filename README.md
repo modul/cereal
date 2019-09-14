@@ -3,10 +3,6 @@
 Cereal is a commandline tool that converts between different
 data-serialization and similar formats.
 
-The input and output file formats can be set explicitly via commandline
-flags. If that's not the case, cereal will try to guess the file format from
-the file extension.
-
 ## Supported conversions
 
 |           | to JSON  | to YAML  | to TOML  |
@@ -17,14 +13,26 @@ the file extension.
 
 ## Usage
 
+Input and output file formats can be set explicitly via commandline flags. If
+that's not the case, cereal will try to guess the file format from the file
+extension.
+
 ```
-cereal [-h] [--version] input output
+cereal [-h] [--output OUTPUT] [--from {JSON,YAML,TOML,guess}]
+              [--to {JSON,YAML,TOML,guess}] [--version]
+              input
 
 positional arguments:
-  input       input file to read serialized data from
-  output      output file to write serialized data to
+  input                 input file to read serialized data from
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --version   show program's version number and exit
+  -h, --help            show this help message and exit
+  --output OUTPUT, -o OUTPUT
+                        output file path to write serialized data to (default:
+                        None)
+  --from {JSON,YAML,TOML,guess}, -f {JSON,YAML,TOML,guess}
+                        input file format (default: guess)
+  --to {JSON,YAML,TOML,guess}, -t {JSON,YAML,TOML,guess}
+                        output file format (default: guess)
+  --version             show program's version number and exit
 ```
