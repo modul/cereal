@@ -57,11 +57,7 @@ def options():
                       help="output file format")
   parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
 
-  args = parser.parse_args()
-
-  args.iconv = converters[args.ifmt] or guessConverter(args.input.name)
-  args.oconv = converters[args.ofmt] or guessConverter(args.output.name)
-  return args
+  return parser.parse_args()
 
 def convert(ifile: IO, ofile: IO, iconv: Converter, oconv: Converter):
   reader = iconv.load
@@ -70,7 +66,10 @@ def convert(ifile: IO, ofile: IO, iconv: Converter, oconv: Converter):
 
 def main():
   opts = options()
-  convert(opts.input, opts.output, opts.iconv, opts.oconv)
+  iconv = converters[opts.ifmt] or guessConverter(opts.input.name)
+  oconv = converters[opts.ofmt] or guessConverter(opts.output.name)
+
+  convert(opts.input, opts.output, iconv, oconv)
 
 if __name__ == "__main__":
   main()
