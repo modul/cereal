@@ -66,13 +66,17 @@ def options():
                       help="output file format")
   parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
 
-  return parser.parse_args()
+  args = parser.parse_args()
 
-def main(ifile: IO, ofile: IO, fromFmt: GetConverter, toFmt: GetConverter):
-  reader = converter(fromFmt)(ifile.name).load
-  writer = converter(toFmt)(ofile.name).dump
+  args.iconv = converter(args.ifmt)
+  args.oconv = converter(args.ofmt)
+  return args
+
+def main(ifile: IO, ofile: IO, iconv: GetConverter, oconv: GetConverter):
+  reader = iconv(ifile.name).load
+  writer = oconv(ofile.name).dump
   writer(reader(ifile), ofile)
 
 if __name__ == "__main__":
   opts = options()
-  main(opts.input, opts.output, opts.ifmt, opts.ofmt)
+  main(opts.input, opts.output, opts.iconv, opts.oconv)
