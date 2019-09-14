@@ -1,8 +1,11 @@
 # Cereal
 
-Cereal is a commandline tool that converts between different serialization
-formats. It currently uses the file extensions of the input and output files
-to guess the format. Recognized file formats include: JSON, YAML and TOML.
+Cereal is a commandline tool that converts between different
+data-serialization and similar formats.
+
+The input and output file formats can be set explicitly via commandline
+flags. If that's not the case, cereal will try to guess the file format from
+the file extension.
 
 ## Supported conversions
 
