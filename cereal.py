@@ -23,26 +23,17 @@ class Converter(NamedTuple):
   load: Reader
   dump: Writer
 
-GetConverter = Callable[[Filename], Converter]
-
-def guessFormat(fn: Filename) -> str:
+def guessConverter(fn: Filename) -> Converter:
   _, ext = splitext(fn)
-  return extensions[ext]
+  fmt = extensions[ext]
+  return converters[fmt]
 
-def converter(typ):
-  return converters[typ]
-
-def constConverter(load: Reader, dump: Writer) -> GetConverter:
-  return lambda _: Converter(load, dump)
-
-def guessConverter() -> GetConverter:
-  return lambda fn: converter(guessFormat(fn))(fn)
 
 converters = {
-  "JSON" : constConverter(json.load, lambda d, f: json.dump(d, f, indent=2)),
-  "YAML" : constConverter(yaml.safe_load, yaml.safe_dump),
-  "TOML" : constConverter(toml.load, toml.dump),
-  "guess": guessConverter()
+  "JSON" : Converter(json.load, lambda d, f: json.dump(d, f, indent=2)),
+  "YAML" : Converter(yaml.safe_load, yaml.safe_dump),
+  "TOML" : Converter(toml.load, toml.dump),
+  "guess": None
 }
 
 extensions = {
@@ -68,13 +59,13 @@ def options():
 
   args = parser.parse_args()
 
-  args.iconv = converter(args.ifmt)
-  args.oconv = converter(args.ofmt)
+  args.iconv = converters[args.ifmt] or guessConverter(args.input.name)
+  args.oconv = converters[args.ofmt] or guessConverter(args.output.name)
   return args
 
-def main(ifile: IO, ofile: IO, iconv: GetConverter, oconv: GetConverter):
-  reader = iconv(ifile.name).load
-  writer = oconv(ofile.name).dump
+def main(ifile: IO, ofile: IO, iconv: Converter, oconv: Converter):
+  reader = iconv.load
+  writer = oconv.dump
   writer(reader(ifile), ofile)
 
 if __name__ == "__main__":
