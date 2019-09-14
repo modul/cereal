@@ -9,6 +9,7 @@ import json
 import yaml
 import toml
 from os.path import splitext
+from sys import exit
 from typing import Callable, IO, NamedTuple
 
 __program__ = "cereal"
@@ -28,6 +29,9 @@ def guessConverter(fn: Filename) -> Converter:
   fmt = extensions[ext]
   return converters[fmt]
 
+def outputFilename(fn: Filename, fmt: str) -> Filename:
+  name, _ = splitext(fn)
+  return "{}.{}".format(name, fmt.lower())
 
 converters = {
   "JSON" : Converter(json.load, lambda d, f: json.dump(d, f, indent=2)),
@@ -50,7 +54,7 @@ def options():
                                    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                    prog=__program__)
   parser.add_argument("input", type=argparse.FileType("r"), help="input file to read serialized data from")
-  parser.add_argument("output", type=argparse.FileType("w"), help="output file to write serialized data to")
+  parser.add_argument("--output", "-o", help="output file path to write serialized data to", default=None)
   parser.add_argument("--from", "-f", dest="ifmt", default="guess", choices=converters.keys(),
                       help="input file format")
   parser.add_argument("--to", "-t", dest="ofmt", default="guess", choices=converters.keys(),
@@ -66,10 +70,17 @@ def convert(ifile: IO, ofile: IO, iconv: Converter, oconv: Converter):
 
 def main():
   opts = options()
-  iconv = converters[opts.ifmt] or guessConverter(opts.input.name)
-  oconv = converters[opts.ofmt] or guessConverter(opts.output.name)
 
-  convert(opts.input, opts.output, iconv, oconv)
+  if opts.ofmt == "guess" and not opts.output:
+    print("Cannot guess output format from empty output file name.")
+    exit(1)
+
+  iconv = converters[opts.ifmt] or guessConverter(opts.input.name)
+  oconv = converters[opts.ofmt] or guessConverter(opts.output)
+  output = opts.output or outputFilename(opts.input.name, opts.ofmt)
+
+  with open(output, "w") as out:
+    convert(opts.input, out, iconv, oconv)
 
 if __name__ == "__main__":
   main()
