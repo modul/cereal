@@ -63,11 +63,14 @@ def options():
   args.oconv = converters[args.ofmt] or guessConverter(args.output.name)
   return args
 
-def main(ifile: IO, ofile: IO, iconv: Converter, oconv: Converter):
+def convert(ifile: IO, ofile: IO, iconv: Converter, oconv: Converter):
   reader = iconv.load
   writer = oconv.dump
   writer(reader(ifile), ofile)
 
-if __name__ == "__main__":
+def main():
   opts = options()
-  main(opts.input, opts.output, opts.iconv, opts.oconv)
+  convert(opts.input, opts.output, opts.iconv, opts.oconv)
+
+if __name__ == "__main__":
+  main()
