@@ -39,7 +39,7 @@ def options():
 
   return parser.parse_args()
 
-def main(ifile, ofile):
+def convert(ifile, ofile):
   _, iext = splitext(ifile.name)
   _, oext = splitext(ofile.name)
 
@@ -47,6 +47,9 @@ def main(ifile, ofile):
   writer = writers[oext]
   writer(reader(ifile), ofile)
 
-if __name__ == "__main__":
+def main():
   opts = options()
-  main(opts.input, opts.output)
+  convert(opts.input, opts.output)
+
+if __name__ == "__main__":
+  main()
