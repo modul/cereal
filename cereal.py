@@ -28,6 +28,9 @@ def guessConverter(fn: Filename) -> Converter:
   fmt = extensions[ext]
   return converters[fmt]
 
+def outputFilename(fn: Filename, fmt: str) -> Filename:
+  name, _ = splitext(fn)
+  return "{}.{}".format(name, fmt.lower())
 
 converters = {
   "JSON" : Converter(json.load, lambda d, f: json.dump(d, f, indent=2)),
