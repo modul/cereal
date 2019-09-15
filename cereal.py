@@ -31,7 +31,7 @@ def guessConverter(fn: Filename) -> Converter:
 
 def outputFilename(fn: Filename, fmt: str) -> Filename:
   name, _ = splitext(fn)
-  return "{}.{}".format(name, fmt.lower())
+  return f"{name}.{fmt.lower()}"
 
 converters = {
   "JSON" : Converter(json.load, lambda d, f: json.dump(d, f, indent=2)),
@@ -50,7 +50,10 @@ extensions = {
 def options():
   recExtensions = ", ".join(extensions.keys())
 
-  parser = argparse.ArgumentParser(description="Converts files between different serialization formats. Uses the file extensions of the input and output files to guess the format if not specified. Recognized extensions are: {}.".format(recExtensions),
+  parser = argparse.ArgumentParser(description=(
+                                    "Converts files between different serialization formats. "
+                                    "Uses the file extensions of the input and output files to guess the format if not specified. "
+                                    f"Recognized extensions are: {recExtensions}."),
                                    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                    prog=__program__)
   parser.add_argument("input", type=argparse.FileType("r"), help="input file to read serialized data from")
@@ -59,7 +62,7 @@ def options():
                       help="input file format")
   parser.add_argument("--to", "-t", dest="ofmt", default="guess", choices=converters.keys(),
                       help="output file format")
-  parser.add_argument("--version", action="version", version="%(prog)s {}".format(__version__))
+  parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
   return parser.parse_args()
 
