@@ -9,7 +9,6 @@ import json
 import yaml
 import toml
 from os.path import splitext
-from sys import exit
 from typing import Callable, IO, NamedTuple
 
 __program__ = "cereal"
